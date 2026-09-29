@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ASESMEN TENGAH SEMESTER GANJIL DDK 1</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(135deg, #eaf4ff, #f8fbff);
+        color: #1f2937;
+        min-height: 100vh;
+    }
+    .app {
+        width: 100%;
+        max-width: 760px;
+        margin: auto;
+        min-height: 100vh;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .card {
+        width: 100%;
+        background: #fff;
+        border-radius: 22px;
+        padding: 24px;
+        box-shadow: 0 10px 35px rgba(30, 64, 175, .12);
+    }
+    .hidden { display: none !important; }
+
+    .header {
+        text-align: center;
+        margin-bottom: 22px;
+    }
+    .badge {
+        display: inline-block;
+        padding: 7px 13px;
+        border-radius: 999px;
+        background: #e0efff;
+        color: #1769aa;
+        font-size: 13px;
+        font-weight: bold;
+        margin-bottom: 12px;
+    }
+    h1 {
+        font-size: clamp(23px, 6vw, 34px);
+        line-height: 1.25;
+        margin: 5px 0 8px;
+        color: #174ea6;
+    }
+    h2 {
+        margin-top: 0;
+        color: #174ea6;
+    }
+    .subtitle {
+        margin: 0;
+        color: #64748b;
+        line-height: 1.5;
+    }
+    label {
+        display: block;
+        font-weight: bold;
+        margin: 15px 0 7px;
+    }
+    input, textarea {
+        width: 100%;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 12px;
+        padding: 13px 14px;
+        font-size: 16px;
+        outline: none;
+        background: #fff;
+    }
+    input:focus, textarea:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59,130,246,.12);
+    }
+    textarea {
+        min-height: 155px;
+        resize: vertical;
+        line-height: 1.5;
+    }
+    .notice {
+        margin-top: 18px;
+        padding: 14px;
+        border-radius: 13px;
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        color: #9a3412;
+        line-height: 1.55;
+        font-size: 14px;
+    }
+    .notice.locked { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+    .notice strong { display: block; margin-bottom: 5px; }
+    .instructions {
+        margin-top: 16px;
+        padding: 14px 16px;
+        border-radius: 13px;
+        background: #f1f5f9;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    .instructions ol {
+        margin: 8px 0 0 20px;
+        padding: 0;
+    }
+    .btn {
+        width: 100%;
+        border: 0;
+        border-radius: 13px;
+        padding: 14px 18px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 18px;
+        background: #2563eb;
+        color: #fff;
+        box-shadow: 0 6px 15px rgba(37,99,235,.22);
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn.secondary {
+        background: #64748b;
+        box-shadow: none;
+    }
+    .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    .question-number {
+        font-weight: bold;
+        color: #475569;
+    }
+    .timer {
+        min-width: 105px;
+        text-align: center;
+        padding: 9px 12px;
+        border-radius: 10px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        font-weight: bold;
+        font-variant-numeric: tabular-nums;
+    }
+    .timer.warning {
+        background: #fef2f2;
+        color: #dc2626;
+        animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+        50% { opacity: .55; }
+    }
+    .progress-wrap {
+        height: 8px;
+        background: #e2e8f0;
+        border-radius: 99px;
+        overflow: hidden;
+        margin-bottom: 22px;
+    }
+    .progress {
+        height: 100%;
+        background: #3b82f6;
+        width: 10%;
+        transition: width .3s ease;
+    }
+    .question {
+        font-size: 18px;
+        line-height: 1.6;
+        font-weight: 700;
+        margin-bottom: 14px;
+    }
+    .hint {
+        color: #64748b;
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+    .answer-status {
+        margin-top: 9px;
+        font-size: 13px;
+        color: #64748b;
+    }
+    .result-icon {
+        width: 82px;
+        height: 82px;
+        border-radius: 50%;
+        background: #dbeafe;
+        color: #2563eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        margin: 0 auto 15px;
+    }
+    .result-center { text-align: center; }
+    .student-info {
+        background: #f8fafc;
+        border-radius: 14px;
+        padding: 15px;
+        margin: 18px 0;
+        line-height: 1.8;
+    }
+    .footer-note {
+        text-align: center;
+        color: #94a3b8;
+        font-size: 12px;
+        margin-top: 18px;
+    }
+    @media (max-width: 500px) {
+        .app { padding: 10px; align-items: flex-start; }
+        .card { padding: 18px; margin-top: 8px; border-radius: 18px; }
+        .question { font-size: 17px; }
+        textarea { min-height: 180px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+    <!-- HALAMAN 1 -->
+    <section id="startPage" class="card">
+        <div class="header">
+            <div class="badge">DDK 1</div>
+            <h1>ASESMEN TENGAH SEMESTER GANJIL DDK 1</h1>
+            <p class="subtitle">Asesmen Tengah Semester Ganjil</p>
+        </div>
+
+        <label for="studentName">Nama Lengkap</label>
+        <input id="studentName" type="text" placeholder="Masukkan nama lengkap">
+
+        <label for="studentClass">Kelas</label>
+        <input id="studentClass" type="text" placeholder="Contoh: X PPLG 1">
+
+        <div class="instructions">
+            <strong>📌 Instruksi Ujian</strong>
+            <ol>
+                <li>Isi nama dan kelas dengan benar.</li>
+                <li>Ujian terdiri dari 10 soal uraian.</li>
+                <li>Ujian dapat diulang, dan setiap percobaan akan dihitung pada perangkat/browser ini.</li>
+                                <li>Waktu untuk setiap soal adalah <strong>10 menit</strong>.</li>
+                <li>Soal berbentuk slide dan hanya <strong>1 soal</strong> ditampilkan dalam satu waktu.</li>
+                <li>Soal berikutnya baru dapat dibuka setelah waktu soal sebelumnya habis.</li>
+                <li>Jawablah dengan bahasa yang jelas dan sesuai materi.</li>
+            </ol>
+        </div>
+
+        <div class="notice">
+            <strong>⚠️ PERINGATAN</strong>
+            Jika halaman ujian ditutup, browser/tab berpindah keluar dari ujian, atau aplikasi keluar dari halaman ujian, maka <strong>waktu pada soal yang sedang dikerjakan akan dianggap habis</strong> dan ujian akan dilanjutkan ke soal berikutnya. Jangan menutup atau berpindah dari halaman ujian selama ujian berlangsung.
+        </div>
+
+        <button id="startButton" class="btn" onclick="startExam()">🚀 MULAI UJIAN</button>
+        <div class="footer-note">Pastikan koneksi dan baterai perangkat cukup sebelum memulai.</div>
+    </section>
+
+    <!-- HALAMAN SOAL -->
+    <section id="examPage" class="card hidden">
+        <div class="topbar">
+            <div class="question-number" id="questionNumber">Soal 1 dari 10</div>
+            <div class="timer" id="timer">10:00</div>
+        </div>
+
+        <div class="progress-wrap">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="question" id="questionText"></div>
+        <div class="hint">💡 Tuliskan jawaban kamu pada kotak di bawah.</div>
+
+        <textarea id="answer" placeholder="Ketik jawaban di sini..."></textarea>
+        <div class="answer-status" id="answerStatus">Jawaban tersimpan otomatis di perangkat.</div>
+
+        <button class="btn hidden" id="nextButton" onclick="nextQuestion()">➡️ Lanjut ke Soal Berikutnya</button>
+    </section>
+
+    <!-- HALAMAN HASIL -->
+    <section id="resultPage" class="card hidden">
+        <div class="result-center">
+            <div class="result-icon">✓</div>
+            <h1>Ujian Selesai</h1>
+            <p class="subtitle">Jawaban telah selesai dikerjakan.</p>
+
+            <div class="student-info">
+                <div><strong>Nama:</strong> <span id="resultName"></span></div>
+                <div><strong>Kelas:</strong> <span id="resultClass"></span></div>
+            </div>
+            <div class="student-info" style="margin-top:12px;">
+                <div><strong>Percobaan ke-:</strong> <span id="attemptNumber">1</span></div>
+                <div><strong>Sudah mengulang:</strong> <span id="repeatCount">0</span> kali</div>
+            </div>
+
+            <p id="resultMessage" style="line-height:1.6;"></p>
+        </div>
+
+        <button class="btn" onclick="downloadPDF()">📄 Download Jawaban PDF</button>
+        <button class="btn secondary" onclick="finishExam()">Selesai</button>
+        <div class="footer-note">Simpan atau dokumentasikan hasil ini jika diperlukan.</div>
+    </section>
+
+</div>
+
+<script>
+const questions = [
+    "Apa yang dimaksud dengan teknologi?",
+    "Sebutkan 5 contoh teknologi yang kamu gunakan dalam kehidupan sehari-hari!",
+    "Sebutkan 3 dampak positif dari penggunaan teknologi!",
+    "Bagaimana teknologi dapat membantu siswa dalam proses belajar? Berikan contohnya.",
+    "Sebutkan 3 contoh peluang bisnis yang muncul karena perkembangan teknologi!",
+    "Mengapa kita tidak boleh langsung menyebarkan informasi yang diterima melalui internet?",
+    "Mengapa kita harus menjaga data pribadi ketika menggunakan internet?",
+    "Sebutkan 5 contoh data pribadi yang harus dijaga!",
+    "Kasus: Seorang siswa menerima berita dari grup WhatsApp dan langsung membagikannya kepada teman-temannya tanpa memeriksa kebenarannya. Apa dampak yang mungkin terjadi dari tindakan tersebut?",
+    "Bagaimana cara kita menggunakan teknologi secara bijak dan bertanggung jawab?"
+];
+
+const TOTAL_TIME = 10 * 60; // 10 menit per soal
+let currentQuestion = 0;
+let timeLeft = TOTAL_TIME;
+let timerInterval = null;
+let answers = Array(questions.length).fill("");
+let examStarted = false;
+let examFinished = false;
+let movingByTimeout = false;
+
+// Satu kali percobaan untuk setiap browser/perangkat.
+// Catatan: penyimpanan ini dapat dihapus jika data situs/browser dihapus.
+const ATTEMPT_COUNT_KEY = "ddk_exam_attempt_count_v1";
+let attemptNumber = 0;
+
+const startPage = document.getElementById("startPage");
+const examPage = document.getElementById("examPage");
+const resultPage = document.getElementById("resultPage");
+const studentName = document.getElementById("studentName");
+const studentClass = document.getElementById("studentClass");
+const answerBox = document.getElementById("answer");
+const timerEl = document.getElementById("timer");
+const nextButton = document.getElementById("nextButton");
+
+function startExam() {
+    const name = studentName.value.trim();
+    const kelas = studentClass.value.trim();
+
+    if (!name || !kelas) {
+        alert("Silakan isi Nama Lengkap dan Kelas terlebih dahulu.");
+        return;
+    }
+
+    if (!confirm("Apakah kamu siap memulai ujian? Setelah dimulai, waktu soal pertama akan berjalan selama 10 menit.")) {
+        return;
+    }
+
+    localStorage.removeItem("ddk_exam_state");
+
+    // Tambahkan jumlah percobaan untuk browser/perangkat ini.
+    attemptNumber = Number(localStorage.getItem(ATTEMPT_COUNT_KEY) || "0") + 1;
+    localStorage.setItem(ATTEMPT_COUNT_KEY, String(attemptNumber));
+
+    examStarted = true;
+    examFinished = false;
+    currentQuestion = 0;
+    timeLeft = TOTAL_TIME;
+    answers = Array(questions.length).fill("");
+
+    startPage.classList.add("hidden");
+    resultPage.classList.add("hidden");
+    examPage.classList.remove("hidden");
+
+    saveState();
+    showQuestion();
+    startTimer();
+}
+
+function showQuestion() {
+    document.getElementById("questionNumber").textContent =
+        `Soal ${currentQuestion + 1} dari ${questions.length}`;
+
+    document.getElementById("questionText").textContent =
+        questions[currentQuestion];
+
+    document.getElementById("progress").style.width =
+        `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+    answerBox.value = answers[currentQuestion] || "";
+    nextButton.classList.add("hidden");
+    updateTimerDisplay();
+}
+
+answerBox.addEventListener("input", function() {
+    answers[currentQuestion] = answerBox.value;
+    saveState();
+    document.getElementById("answerStatus").textContent =
+        "✓ Jawaban tersimpan otomatis.";
+});
+
+function startTimer() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        if (!examStarted || examFinished) return;
+
+        timeLeft--;
+        updateTimerDisplay();
+        saveState();
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            answers[currentQuestion] = answerBox.value;
+            movingByTimeout = true;
+            nextQuestion();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    timerEl.textContent =
+        `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+    if (timeLeft <= 60) {
+        timerEl.classList.add("warning");
+    } else {
+        timerEl.classList.remove("warning");
+    }
+}
+
+function nextQuestion() {
+    answers[currentQuestion] = answerBox.value;
+    saveState();
+
+    if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        timeLeft = TOTAL_TIME;
+        movingByTimeout = false;
+        showQuestion();
+        startTimer();
+    } else {
+        finishExamNow();
+    }
+}
+
+function finishExamNow() {
+    clearInterval(timerInterval);
+    examStarted = false;
+    examFinished = true;
+
+    const name = studentName.value.trim();
+    const kelas = studentClass.value.trim();
+
+    const repeatCount = Math.max(0, attemptNumber - 1);
+    document.getElementById("resultName").textContent = name;
+    document.getElementById("resultClass").textContent = kelas;
+    document.getElementById("attemptNumber").textContent = attemptNumber;
+    document.getElementById("repeatCount").textContent = repeatCount;
+
+    document.getElementById("resultMessage").textContent =
+        "Jawaban telah selesai dikerjakan. Silakan unduh PDF untuk dikumpulkan kepada guru.";
+
+    examPage.classList.add("hidden");
+    resultPage.classList.remove("hidden");
+
+    localStorage.removeItem("ddk_exam_state");
+}
+
+
+function escapeHtml(value) {
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+}
+
+function downloadPDF() {
+    const name = studentName.value.trim();
+    const kelas = studentClass.value.trim();
+    const repeatCount = Math.max(0, attemptNumber - 1);
+    let rows = "";
+
+    questions.forEach((question, i) => {
+        rows += `
+        <section class="q">
+            <h3>Soal ${i + 1}</h3>
+            <p><strong>${escapeHtml(question)}</strong></p>
+            <div class="answer">${escapeHtml(answers[i] || "(Tidak ada jawaban)").replace(/\n/g, "<br>")}</div>
+        </section>`;
+    });
+
+    const w = window.open("", "_blank");
+    if (!w) {
+        alert("Pop-up diblokir browser. Izinkan pop-up untuk website ini lalu coba lagi.");
+        return;
+    }
+
+    w.document.write(`<!DOCTYPE html><html lang="id"><head>
+<meta charset="UTF-8"><title>Jawaban ATS DDK 1</title>
+<style>
+@page{size:A4;margin:18mm}body{font-family:Arial,sans-serif;color:#111827;line-height:1.5;font-size:12pt}
+h1{text-align:center;font-size:18pt;margin:0 0 6px}.sub{text-align:center;color:#64748b;margin-bottom:20px}
+.info{border:1px solid #cbd5e1;padding:12px;border-radius:8px;margin-bottom:18px}
+.q{page-break-inside:avoid;margin-bottom:20px}h3{color:#174ea6;margin-bottom:6px}
+.answer{border:1px solid #cbd5e1;border-radius:6px;padding:12px;min-height:40px}
+</style></head><body>
+<h1>ASESMEN TENGAH SEMESTER GANJIL DDK 1</h1>
+<div class="sub">Lembar Jawaban Essay</div>
+<div class="info">
+<strong>Nama:</strong> ${escapeHtml(name)}<br>
+<strong>Kelas:</strong> ${escapeHtml(kelas)}<br>
+<strong>Percobaan ke:</strong> ${attemptNumber}<br>
+<strong>Sudah mengulang:</strong> ${repeatCount} kali<br>
+<strong>Waktu selesai:</strong> ${new Date().toLocaleString("id-ID")}
+</div>
+${rows}</body></html>`);
+    w.document.close();
+    setTimeout(() => { w.focus(); w.print(); }, 500);
+}
+
+function finishExam() {
+    alert("Ujian telah selesai. Terima kasih.");
+    location.reload();
+}
+
+
+function saveState() {
+    if (!examStarted || examFinished) return;
+
+    const state = {
+        examStarted: true,
+        name: studentName.value,
+        kelas: studentClass.value,
+        currentQuestion,
+        timeLeft,
+        answers
+    };
+
+    localStorage.setItem("ddk_exam_state", JSON.stringify(state));
+}
+
+/*
+  Jika peserta berpindah tab/aplikasi atau halaman menjadi tidak terlihat,
+  soal yang sedang aktif dianggap waktunya habis.
+*/
+document.addEventListener("visibilitychange", function() {
+    if (document.hidden && examStarted && !examFinished) {
+        handleExitFromExam();
+    }
+});
+
+window.addEventListener("pagehide", function() {
+    if (examStarted && !examFinished) {
+        handleExitFromExam();
+    }
+});
+
+function handleExitFromExam() {
+    if (!examStarted || examFinished) return;
+
+    answers[currentQuestion] = answerBox.value;
+    saveState();
+
+    // Menandai bahwa peserta meninggalkan halaman ujian.
+    localStorage.setItem("ddk_exam_left", JSON.stringify({
+        name: studentName.value,
+        kelas: studentClass.value,
+        question: currentQuestion + 1
+    }));
+
+    // Waktu soal aktif dianggap habis.
+    timeLeft = 0;
+}
+
+/*
+  Catatan:
+  Browser tidak mengizinkan halaman web memblokir secara sempurna
+  tindakan seperti menutup aplikasi atau mematikan perangkat.
+  Mekanisme di atas menangani perpindahan tab/halaman yang terdeteksi.
+*/
+window.addEventListener("load", function() {
+    const leftInfo = localStorage.getItem("ddk_exam_left");
+
+    if (leftInfo) {
+        localStorage.removeItem("ddk_exam_left");
+        alert("Peringatan: ujian sebelumnya terdeteksi keluar dari halaman. Soal yang sedang dikerjakan dianggap habis waktunya.");
+    }
+});
+</script>
+
+</body>
+</html>
